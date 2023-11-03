@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Library API
   version: 1.0.0
-  description: STD22001
+  description: STD22056
 servers:
   - url: https://library.com
 paths:
@@ -18,7 +18,12 @@ paths:
           required: false
           schema:
             type: string
-        #TODO3: add parameter to filter books by intervals of dates of the releaseDate
+        - in: query
+          name: releaseDate
+          description: Filter books by intervals of dates of the releaseDate
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: The list of filtered books
@@ -97,7 +102,6 @@ paths:
       responses:
         204:
           description: Successful author deletion
-
 components:
   schemas:
     Book:
