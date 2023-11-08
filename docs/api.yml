@@ -47,12 +47,12 @@ paths:
             type: integer
           required: false
           default: 1
-            - in: query
-              name: pageSize
-              schema:
-                type: integer
-              required: false
-              default: 50
+                     - in: query
+                     name: pageSize
+                     schema:
+                       type: integer
+                     required: false
+                     default: 50
           responses:
             200:
               description: The books have been successfully returned
@@ -113,21 +113,21 @@ paths:
             type: integer
           required: false
           default: 1
-            - in: path
-              name: pageSize
-              schema:
-                type: integer
-              required: false
-              default: 50
-            responses:
-              200:
-                description: The authors have been successfully returned
-                content:
-                  application/json:
-                    schema:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/Author'
+                     - in: path
+                     name: pageSize
+                     schema:
+                       type: integer
+                     required: false
+                     default: 50
+                     responses:
+                       200:
+                         description: The authors have been successfully returned
+                         content:
+                           application/json:
+                             schema:
+                               type: array
+                               items:
+                                 $ref: '#/components/schemas/Author'
       responses:
         200:
           description: The list of filtered authors
@@ -194,14 +194,14 @@ paths:
         - schema:
             type: integer
       responses:
-          200:
-            description: author updated successfully
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Book'
-          400:
-            description: bad request
+        200:
+          description: author updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        400:
+          description: bad request
   /books/authors:
     put:
       operationId: updateBooksAuthors
@@ -272,7 +272,7 @@ components:
     UpdateBookAuthor:
       type: object
       properties:
-          bookId:
-            type: integer
-          authorId:
-            type: integer
+        bookId:
+          type: integer
+        authorId:
+          type: integer
