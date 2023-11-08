@@ -216,26 +216,67 @@ paths:
                     $ref: '#/components/responses/403'
                 '500':
                     $ref: '#/components/responses/500'
-    /books/authors:
-        put:
-            operationId: updateBooksAuthors
+    /books/import:
+        post:
+            tags:
+                - Books
+            summary: Import books from Excel or JSON
+            operationId: importBooks
             requestBody:
+                description: Import books from Excel or JSON
                 required: true
                 content:
                     application/json:
                         schema:
-                            type: array
-                            items:
-                                $ref: '#/components/schemas/UpdateBookAuthor'
+                            oneOf:
+                                - $ref: '#/components/schemas/ImportBookJSON'
+                                - $ref: '#/components/schemas/ImportBookExcel'
+                    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+                        schema:
+                            $ref: '#/components/schemas/ImportBookExcel'
             responses:
                 '200':
-                    description: all author updated successfully
+                    description: List of imported books
                     content:
                         application/json:
                             schema:
                                 type: array
                                 items:
                                     $ref: '#/components/schemas/Book'
+                '400':
+                    $ref: '#/components/responses/400'
+                '403':
+                    $ref: '#/components/responses/403'
+                '500':
+                    $ref: '#/components/responses/500'
+
+    /authors/import:
+        post:
+            tags:
+                - Authors
+            summary: Import authors from Excel or JSON
+            operationId: importAuthors
+            requestBody:
+                description: Import authors from Excel or JSON
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            oneOf:
+                                - $ref: '#/components/schemas/ImportAuthorJSON'
+                                - $ref: '#/components/schemas/ImportAuthorExcel'
+                    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+                        schema:
+                            $ref: '#/components/schemas/ImportAuthorExcel'
+            responses:
+                '200':
+                    description: List of imported authors
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Author'
                 '400':
                     $ref: '#/components/responses/400'
                 '403':
@@ -338,6 +379,71 @@ components:
             example:
                 type: InternalServerException
                 message: Internal server error
+        ImportBookJSON:
+            type: object
+            properties:
+                books:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BookJSON'
+            required:
+                - books
+
+        ImportBookExcel:
+            type: object
+            properties:
+                excelFile:
+                    type: string
+                    format: binary
+            required:
+                - excelFile
+
+        ImportAuthorJSON:
+            type: object
+            properties:
+                authors:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/AuthorJSON'
+            required:
+                - authors
+
+        ImportAuthorExcel:
+            type: object
+            properties:
+                excelFile:
+                    type: string
+                    format: binary
+            required:
+                - excelFile
+
+        BookJSON:
+            type: object
+            properties:
+                bookName:
+                    type: string
+                author:
+                    $ref: '#/components/schemas/AuthorJSON'
+                pageNumbers:
+                    type: integer
+                topic:
+                    type: string
+                    enum:
+                        - ROMANCE
+                        - COMEDY
+                        - OTHER
+                releaseDate:
+                    type: string
+                    format: date
+
+        AuthorJSON:
+            type: object
+            properties:
+                authorName:
+                    type: string
+                sex:
+                    $ref: '#/components/schemas/Sex'
+
     responses:
       '400':
          description: Bad request
