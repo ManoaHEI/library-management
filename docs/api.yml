@@ -2,8 +2,8 @@ openapi: 3.0.3
 
 info:
     title: Library API
-    version: 1.1.1
-    description: STD22056
+    version: 1.2.0
+    description: STD22056 | STD22057
 
 servers:
 -   url: https://library.com
@@ -216,6 +216,50 @@ paths:
                     $ref: '#/components/responses/403'
                 '500':
                     $ref: '#/components/responses/500'
+
+    /visitor/{id}/borrow:
+        get:
+            tags:
+              - Visitor
+            summary: take all the books that have been borrowed by the visitor with the corresponding visitorId
+            operationId: getBorrow
+            parameters:
+              - name: id
+                description: the id of the visitor that borrow the book
+                in: path
+                required: true
+                schema:
+                    type: number
+              - name: borrowDate
+                description: the date of the borrow
+                in: query
+                required: false
+                schema:
+                    type: string
+              - name: borrowBefore
+                in: query
+                required: false
+                schema:
+                    type: string
+              - name: borrowAfter
+                in: query
+                required: false
+                schema:
+                    type: string
+            responses:
+                '200':
+                    description: The list of borrowed books
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Book'
+                '400':
+                    $ref: '#/components/responses/400'
+                '403':
+                    $ref: '#/components/responses/403'
+                '500':
+                    $ref: '#/components/responses/500'
+
     /books/import:
         post:
             tags:
@@ -235,14 +279,8 @@ paths:
                         schema:
                             $ref: '#/components/schemas/ImportBookExcel'
             responses:
-                '200':
-                    description: List of imported books
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Book'
+                '201':
+                    description: Created new book import
                 '400':
                     $ref: '#/components/responses/400'
                 '403':
@@ -269,14 +307,61 @@ paths:
                         schema:
                             $ref: '#/components/schemas/ImportAuthorExcel'
             responses:
-                '200':
-                    description: List of imported authors
+                '201':
+                    description: Created new authors import
+                '400':
+                    $ref: '#/components/responses/400'
+                '403':
+                    $ref: '#/components/responses/403'
+                '500':
+                    $ref: '#/components/responses/500'
+    /borrow/{visitorId}/{bookId}:
+        post:
+            tags:
+              - Borrow
+            summary: Borrow a book
+            operationId: borrowBook
+            parameters:
+                -   name: visitorId
+                    in: path
+                    required: true
+                    schema:
+                        type: number
+                -   name: bookId
+                    in: path
+                    required: true
+                    schema:
+                        type: number
+            responses:
+                '201':
+                    description: New borrow create
+                '400':
+                    $ref: '#/components/responses/400'
+                '403':
+                    $ref: '#/components/responses/403'
+                '500':
+                    $ref: '#/components/responses/500'
+    /borrow/{borrowId}:
+        put:
+            tags:
+                - Borrow
+            summary: Modify a borrow by updating returnDate
+            parameters:
+                - name: borrowId
+                  in: path
+                  required: true
+                  schema:
+                    type: number
+
+                requestBody:
+                    required: true
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Author'
+                                $ref: '#/components/schemas/borrow'
+            responses:
+                '200':
+                    description: Borrow updated
                 '400':
                     $ref: '#/components/responses/400'
                 '403':
@@ -304,6 +389,31 @@ components:
               default: 1
 
     schemas:
+        borrow:
+            type: object
+            properties:
+                borrowId:
+                    type: number
+                visitorId:
+                    type: number
+                bookId:
+                    type: number
+                borrowDate:
+                    type: string
+                    format: date
+                returnDate:
+                    type: string
+                    format: date
+
+        visitor:
+            type: object
+            properties:
+                id:
+                  type: number
+                name:
+                    type: string
+                reference:
+                    type: string
         Book:
             type: object
             properties:
