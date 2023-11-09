@@ -353,7 +353,7 @@ paths:
                   schema:
                     type: number
 
-                requestBody:
+                  requestBody:
                     required: true
                     content:
                         application/json:
@@ -368,7 +368,32 @@ paths:
                     $ref: '#/components/responses/403'
                 '500':
                     $ref: '#/components/responses/500'
+    /available/{availableID}:
+        get:
+            tags:
+                - Available
+            description: Get all list of books available
+            parameters:
+                - name: availableID
+                  in: path
+                  required: true
+                  schema:
+                      type: boolean
 
+                      content:
+                          application/json:
+                              schema:
+                                  $ref: '#/components/schemas/available'
+
+            responses:
+              '200':
+                  description: Available updated
+              '400':
+                  $ref: '#/components/responses/400'
+              '403':
+                  $ref: '#/components/responses/403'
+              '500':
+                  $ref: '#/components/responses/500'
 components:
     parameters:
       queryPagination:
@@ -404,6 +429,16 @@ components:
                 returnDate:
                     type: string
                     format: date
+        available:
+            type: object
+            properties:
+                id:
+                    type: integer
+                book_id:
+                    type: integer
+                available:
+                    type: boolean
+
 
         visitor:
             type: object
