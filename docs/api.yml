@@ -348,18 +348,17 @@ paths:
                 - Borrow
             summary: Modify a borrow by updating returnDate
             parameters:
-                - name: borrowId
-                  in: path
-                  required: true
-                  schema:
-                    type: number
-
-                  requestBody:
+                -   name: borrowId
+                    in: path
                     required: true
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/borrow'
+                    schema:
+                        type: number
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/borrow'
             responses:
                 '200':
                     description: Borrow updated
@@ -375,20 +374,19 @@ paths:
                 - Available
             description: Get all list of books available
             parameters:
-                - name: availableID
-                  in: path
-                  required: true
-                  schema:
-                      type: boolean
-
-                      content:
-                          application/json:
-                              schema:
-                                  $ref: '#/components/schemas/available'
+                -   name: availableID
+                    in: path
+                    required: true
+                    schema:
+                        type: boolean
 
             responses:
               '200':
-                  description: Available updated
+                    description: Available updated
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/available'
               '400':
                   $ref: '#/components/responses/400'
               '403':
